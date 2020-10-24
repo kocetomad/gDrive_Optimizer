@@ -1,4 +1,4 @@
-APIkey="AIzaSyBcNCZZIEzsBOI8cyoj-Cb3e8lJe4Qg1Lk"
+APIkey=process.env.APIkey
 const download = (fileID,token) => {
     let file = {
         hostname: "www.googleapis.com",
