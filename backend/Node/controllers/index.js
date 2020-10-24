@@ -9,7 +9,7 @@ const fetchFile = (req, res, cb) => {
     //async callback, downloads a file from the user's drive/returns download status 
     download(gAPI.download(req.body.fileID, req.body.token), gAPI.getMeta(req.body.fileID, req.body.token), "", function (data) {
         console.log(data)
-        res.send(data)
+        res.json({ success: true, msg: data })
     })
 }
 
