@@ -2,6 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import TreeView from './TreeView.js'
+import GDriveLogIn from "./GDriveLogIn";
 
 const API_OUTPUT = {
   "kind": "drive#fileList",
@@ -87,6 +88,7 @@ function App() {
         >
           Learn React
         </a>
+        <GDriveLogIn/>
         <TreeView files={API_OUTPUT.files}/>
       </header>
     </div>
