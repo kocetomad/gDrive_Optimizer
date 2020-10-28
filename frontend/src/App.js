@@ -16,6 +16,7 @@ function App() {
     setUserName(userProfile.givenName + " " + userProfile.familyName)
 
     setLoggedInState(true)
+    console.log("Login successful.")
     setAccessToken(response.tokenObj.access_token)
   }
 
