@@ -13,7 +13,6 @@ app.use(express.json())
 app.use(helmet())
 
 // Routes
-
 app.post('/fetchFile', (req, res) => controllers.fetchFile(req, res))
 
 app.post('/fetchMultipleFiles',  (req, res) => controllers.fetchMultipleFiles(req, res))

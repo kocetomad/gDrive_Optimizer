@@ -19,7 +19,10 @@
     "handbrake-js": "^5.0.0",
     "helmet": "^3.21.3",
     "morgan": "^1.9.1",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "node-fetch": "^2.6.1",
+    "request": "^2.88.2",
+    "rimraf": "^3.0.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"
