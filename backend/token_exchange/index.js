@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 
-const get_access_token_using_saved_refresh_token = () => {
+const get_access_token_using_saved_refresh_token = (callback) => {
+
     // from the oauth playground
     const refresh_token = process.env.refresh_token;
     // from the API console
@@ -10,9 +11,9 @@ const get_access_token_using_saved_refresh_token = () => {
     // from https://developers.google.com/identity/protocols/OAuth2WebServer#offline
     const refresh_url = process.env.refresh_url;
 
-    const post_body = `grant_type=refresh_token&client_id=${encodeURIComponent(client_id)}
-    &client_secret=${encodeURIComponent(client_secret)}
-    &refresh_token=${encodeURIComponent(refresh_token)}`;
+    const post_body = `grant_type=refresh_token&client_id=${encodeURIComponent(client_id)}` +
+        `&client_secret=${encodeURIComponent(client_secret)}` +
+        `&refresh_token=${encodeURIComponent(refresh_token)}`;
 
     let refresh_request = {
         body: post_body,
@@ -22,13 +23,12 @@ const get_access_token_using_saved_refresh_token = () => {
         }
     }
 
-    fetch(refresh_url, refresh_request).then(response => {
-        return (response.json());
-    }).then(response_json => {
-        console.log(response_json);
-    });
+    fetch(refresh_url, refresh_request).then(response => response.json()
+    ).then(response_json => callback(response_json))
+        
 }
 
 module.exports = {
     get_access_token_using_saved_refresh_token
 }
+
