@@ -1,7 +1,6 @@
 var express = require('express');
 const helmet = require('helmet');
-var https = require('https');
-var fs = require('fs');
+
 require('dotenv').config();
 
 const app = express()
