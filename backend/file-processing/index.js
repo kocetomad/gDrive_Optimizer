@@ -126,8 +126,6 @@ const upload = (folder, token, callback) => {
     });
 }
 
-
-
 module.exports = {
     download,
     compress,
