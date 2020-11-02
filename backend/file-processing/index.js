@@ -40,7 +40,7 @@ const compress = (folder, callback) => {
     i = 0
     fs.readdir(folder, (err, files) => {
         files.forEach(file => {
-            i++
+            
             //the regex is used to trim the original file extension 
             hbjs.spawn({ input: folder + "/" + file, output: folder + "-compressed" + "/" + file.replace(/\.[^/.]+$/, "") + '.m4v' })
                 .on('error', err => {
@@ -53,9 +53,13 @@ const compress = (folder, callback) => {
                         progress.percentComplete,
                         progress.eta
                     )
-                    if (progress.percentComplete == 100 && i == files.length) {
+                    if (progress.percentComplete == 100) {
                         console.log("finish")
-                       
+                        i++;
+                        
+                    }
+                    if (i==files.length){
+                        
                         callback(folder + "-compressed")
                     }
 
@@ -73,7 +77,7 @@ const upload = (folder, token, callback) => {
     const accessToken = token;
 
     fs.readdir(folder, (err, files) => {
-        i=0
+        i = 0
         files.forEach(file => {
             i++
             const filename = folder + "/" + file;
@@ -95,7 +99,7 @@ const upload = (folder, token, callback) => {
                 (err, res) => {
                     if (err) {
                         callback(err)
-                        console.log(err); 
+                        console.log(err);
                     }
 
                     // 2. Upload the file.
@@ -113,7 +117,7 @@ const upload = (folder, token, callback) => {
                             }
                             callback(body)
 
-                            
+
                         }
                     );
                 }
