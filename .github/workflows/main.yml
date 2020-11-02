@@ -1,25 +1,17 @@
-# This is a basic workflow to help you get started with Actions
-
 name: AutoDeployBackend
-
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the main branch
-on:
+on: 
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   build:
-    name: Build
     runs-on: ubuntu-latest
     steps:
-  # This workflow contains a single job called "build"
-    - name: Execute SSH commmands on remote server
-      uses: JimCronqvist/action-ssh@master
-      with:
-        hosts: 'kocetomad@punchy.servebeer.com'
-        privateKey: ${{ secrets.PRIVATE_KEY }}
-        command: ./Deploy.sh
+      - name: Deploy pipeline
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            ./Deploy.sh
+          host: kocetomad@punchy.servebeer.com
+          user: kocetomad
+          key: ${{ secrets.PRIVATE_KEY}}
