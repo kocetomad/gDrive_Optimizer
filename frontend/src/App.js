@@ -63,7 +63,7 @@ function App() {
       </Navbar>
 
       <header className="App-header">
-        <TreeViewComponent access_token={accessToken} isLoggedIn={loggedInState}/>
+        {loggedInState && <TreeViewComponent access_token={accessToken}/>}
       </header>
     </div>
   );
