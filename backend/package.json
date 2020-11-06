@@ -1,0 +1,30 @@
+{
+  "name": "gDriveOptimizer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^3.2.0",
+    "axios": "^0.19.2",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "handbrake-js": "^5.0.0",
+    "helmet": "^3.21.3",
+    "morgan": "^1.9.1",
+    "mysql": "^2.18.1",
+    "node-fetch": "^2.6.1",
+    "request": "^2.88.2",
+    "rimraf": "^3.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
