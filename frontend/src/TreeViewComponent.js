@@ -1,17 +1,14 @@
 import React, {useState} from 'react';
-import {Button, Card} from "react-bootstrap";
+import Card from "react-bootstrap/Card";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
-import {TreeItem, TreeView} from '@material-ui/lab';
-import {ArrowDropDown, ArrowDropUp} from "@material-ui/icons";
+
+import TreeViewContent from "./TreeViewContent";
 
 const API_KEY = "[AIzaSyBcNCZZIEzsBOI8cyoj-Cb3e8lJe4Qg1Lk]"
 
 function TreeViewComponent(props) {
   const [files, setFiles] = useState({})
-  const [rootID, setRootID] = useState("")
-
-  const[counter, setCounter] = useState(0)
 
   const getRoot = (accessToken) => {
     fetch('https://www.googleapis.com/drive/v3/files/root?key=' + API_KEY, {
@@ -93,31 +90,13 @@ function TreeViewComponent(props) {
         console.error({response: 'Error performing fetch!', error: error});
       })
   }
-
-  function changeCounter(amount) {
-    setCounter(amount + 1)
-  }
-
-  const renderTree = (files) => (
-    <TreeItem key={files.id} nodeId={files.id} label={files.name}>
-      {Array.isArray(files.children) ? files.children.map((node) => renderTree(node)) : null}
-    </TreeItem>
-  );
-
   return (
     <Card>
+      <Card.Title>
+        TreeView
+      </Card.Title>
       <Card.Body>
-        <Button onClick={() => getRoot(props.access_token)}>Get Root</Button>
-        <Button onClick={() => getFiles(props.access_token, rootID)}>Get Children</Button>
-
-        <Button onClick={() => changeCounter(counter)}>{counter}</Button>
-        <TreeView
-          defaultCollapseIcon={<ArrowDropUp/>}
-          defaultExpanded={['root']}
-          defaultExpandIcon={<ArrowDropDown/>}
-        >
-          {renderTree(files)}
-        </TreeView>
+        {props.access_token && <TreeViewContent access_token={props.access_token} api_key={API_KEY}/>}
       </Card.Body>
     </Card>
   )

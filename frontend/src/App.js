@@ -27,7 +27,7 @@ function App() {
 
   // what happens when you log out from Google
   let onLogoutSuccess = () => {
-    console.log({result: "Logout successful."})
+    console.log("Logout successful.")
     setLoggedInState(false)
     setAccessToken("")
   }
