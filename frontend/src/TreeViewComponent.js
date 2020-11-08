@@ -69,7 +69,7 @@ function TreeViewComponent(props) {
   return (
     <Card>
       <Card.Title>
-        TreeView
+        Drive Content
       </Card.Title>
       <Card.Body>
         {!files && <CircularProgress className={classes.circular_progress}/>}
