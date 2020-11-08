@@ -2,13 +2,15 @@ import React, {useState} from "react";
 import {ArrowDropDown, ArrowDropUp} from "@material-ui/icons";
 import {TreeItem, TreeView} from "@material-ui/lab";
 import {makeStyles} from '@material-ui/core/styles';
-import getIcon from "./helpers/getIconHelper";
+import {getIcon, getCheckbox} from "./helpers/IconHelpers";
 
-function renderTree(files) {
-  return <TreeItem key={files.id}
-                   nodeId={files.id}
-                   label={<div>{getIcon(files.mimeType)}{files.name}</div>}>
-    {Array.isArray(files.children) ? files.children.map((node) => renderTree(node)) : null}
+//TODO: Add a checkbox for selected nodes
+// Basically if I click on a node, I select it with checkbox
+
+function renderTree(file, selected_nodes) {
+  return <TreeItem nodeId={file.id}
+                   label={<div>{/*TODO Checkbox code with 'selected_nodes' getCheckbox(file, selected_nodes)*/}{getIcon(file.mimeType)}{file.name}</div>}>
+    {Array.isArray(file.children) ? file.children.map((node) => renderTree(node)) : null}
   </TreeItem>
 }
 
@@ -45,7 +47,7 @@ function TreeViewContent(props) {
       onNodeSelect={handleSelect}
       multiSelect
     >
-      {renderTree(props.files)}
+      {renderTree(props.files, selectedNodes)}
     </TreeView>
   )
 }

@@ -5,10 +5,22 @@ import MovieIcon from "@material-ui/icons/Movie";
 import PhotoIcon from "@material-ui/icons/Photo";
 import DescriptionIcon from "@material-ui/icons/Description";
 
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+
+function getCheckbox(file, selected_nodes){
+  // TODO Checkbox functionality.
+  if (file.id in selected_nodes) { // or something like that
+    return <CheckBoxIcon/>
+  } else {
+    return <CheckBoxOutlineBlankIcon/>
+  }
+}
+
 function getIcon(mimeType) {
   switch (mimeType) {
     case "application/vnd.google-apps.folder":
-      return <FolderIcon/>
+      return <FolderIcon style={{paddingRight: '2dp'}}/>
     case "video/mp4":
       return <MovieIcon/>
     case "image/png":
@@ -21,4 +33,4 @@ function getIcon(mimeType) {
   }
 }
 
-export default getIcon
+export {getCheckbox, getIcon}
