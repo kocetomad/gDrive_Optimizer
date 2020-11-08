@@ -1,14 +1,30 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Card from "react-bootstrap/Card";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import TreeViewContent from "./TreeViewContent";
 
+import {getRootFolder, getRootChildren} from "./services/rootFolder";
+import {makeStyles} from "@material-ui/core/styles";
+
 const API_KEY = "[AIzaSyBcNCZZIEzsBOI8cyoj-Cb3e8lJe4Qg1Lk]"
 
+const useStyles = makeStyles((theme) => ({
+  circular_progress: {
+    display: 'flex',
+    '& > * + *': {
+      marginLeft: theme.spacing(2),
+    },
+  },
+}));
+
 function TreeViewComponent(props) {
-  const [files, setFiles] = useState({})
+  const classes = useStyles();
+
+  const [files, setFiles] = useState({});
+  const [rootIsSet, setRootPresence] = useState(false);
 
   const getRoot = (accessToken) => {
     fetch('https://www.googleapis.com/drive/v3/files/root?key=' + API_KEY, {
@@ -38,8 +54,6 @@ function TreeViewComponent(props) {
         newFiles.children = []
         setFiles(newFiles)
         console.log(newFiles)
-
-        setRootID(data.id.toString())
       })
       .catch(() => {
         console.error({response: 'Error fetching!'});
@@ -90,13 +104,45 @@ function TreeViewComponent(props) {
         console.error({response: 'Error performing fetch!', error: error});
       })
   }
+
+  useEffect(() => {
+    let mounted = true;
+    getRootFolder(API_KEY, props.access_token)
+      .then(response => response.json())
+      .then(data => {
+          if (mounted) {
+            console.log("getting root folder")
+            setFiles(data)
+            setRootPresence(true)
+          }
+        }
+      );
+  }, [props.access_token])
+
+  useEffect(() => {
+    let mounted = true;
+    if(rootIsSet) {
+      getRootChildren(API_KEY, props.access_token, files.id)
+        .then(response => response.json())
+        .then(data => {
+          if (mounted) {
+            console.log("root children data here: " + data)
+          }
+        })
+      return () => {
+        mounted = false;
+      };
+    }
+  },[rootIsSet, props.access_token, files.id])
+
   return (
     <Card>
       <Card.Title>
         TreeView
       </Card.Title>
       <Card.Body>
-        {props.access_token && <TreeViewContent access_token={props.access_token} api_key={API_KEY}/>}
+        {!files && <CircularProgress className={classes.circular_progress}/>}
+        {files && <TreeViewContent files={files}/>}
       </Card.Body>
     </Card>
   )
