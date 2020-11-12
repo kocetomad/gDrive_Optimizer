@@ -8,10 +8,11 @@ import {getIcon, getCheckbox} from "./helpers/IconHelpers";
 // Basically if I click on a node, I select it with checkbox
 
 function renderTree(file, selected_nodes) {
-  return <TreeItem nodeId={file.id}
-                   label={<div>{/*TODO Checkbox code with 'selected_nodes' getCheckbox(file, selected_nodes)*/}{getIcon(file.mimeType)}{file.name}</div>}>
-    {Array.isArray(file.children) ? file.children.map((node) => renderTree(node)) : null}
-  </TreeItem>
+  return (<TreeItem nodeId={file.id}
+                   key={file.id}
+                   label={<div>{getCheckbox(file, selected_nodes)}{getIcon(file.mimeType)}{file.name}</div>}>
+    {Array.isArray(file.children) ? file.children.map((node) => renderTree(node, selected_nodes)) : null}
+  </TreeItem>)
 }
 
 const useStyles = makeStyles((theme) => ({

@@ -8,9 +8,9 @@ import DescriptionIcon from "@material-ui/icons/Description";
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 
-function getCheckbox(file, selected_nodes){
+function getCheckbox(file, selected_nodes) {
   // TODO Checkbox functionality.
-  if (file.id in selected_nodes) { // or something like that
+  if (selected_nodes.includes(file.id)) {
     return <CheckBoxIcon/>
   } else {
     return <CheckBoxOutlineBlankIcon/>
