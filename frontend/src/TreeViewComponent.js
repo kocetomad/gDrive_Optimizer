@@ -45,7 +45,7 @@ function TreeViewComponent(props) {
     return () => {
       mounted = false;
     };
-  }, [props.access_token])
+  }, [files, props.access_token])
 
   useEffect(() => {
     let mounted = true;
@@ -64,7 +64,7 @@ function TreeViewComponent(props) {
         mounted = false;
       };
     }
-  }, [rootIsSet, props.access_token, files.id])
+  }, [rootIsSet, props.access_token, files])
 
   return (
     <Card>
