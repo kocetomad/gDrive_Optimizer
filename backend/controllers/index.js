@@ -20,19 +20,28 @@ const fetchMultipleFiles = (req, res) => {
             if (i == req.body.fileID.length) {
                 console.log(list)
                 let path = "files/" + req.body.email
-                //Not sure if tripple nested callbacks is optimal but it works well  
+                //Not sure if multiple nested callbacks is optimal but it works well ( ;/ )
                 //1.Compressing the files
-                file.compress(path, function (compressed_files) {
-                    //2.Authenticating for gDrive
+                //2.Authenticating for gDrive
+                //3.Creates a folder for the user files inside our drive
+                //4.Uploading onto gdrive
+                //5.Shares the folder created in (3) with the user 
+                file.compress(path, function (compressed_files) {//1
                     rimraf(path, function () { console.log("dir removed"); });//deletes the uncompressed files from the server
-                    auth.get_access_token_using_saved_refresh_token(function (auth_data) {
-                        console.log(auth_data.access_token,"files/"+compressed_files)
-                        //3.Uploading onto gdrive
-                        file.upload(compressed_files,auth_data.access_token, function(upload_response){
-                            console.log("uploaded:"+upload_response)
-                            //deletes the compressed files from the server
-                            rimraf(compressed_files, function () { console.log("done"); });
+                    auth.get_access_token_using_saved_refresh_token(function (auth_data) {//2
+                        console.log(auth_data.access_token, "files/" + compressed_files)
+                        file.makeFolder(gAPI.makeFolder(req.body.email, auth_data.access_token), function (folderID) {//3
+                            console.log("folder ID:"+(folderID.id))
+                            file.upload(compressed_files, auth_data.access_token, folderID.id, function (upload_response) {//4
+                                console.log("uploaded:" + upload_response)
+                                //deletes the compressed files from the server
+                                rimraf(compressed_files, function () { console.log("done"); });
+                                file.share(gAPI.createPermissions(folderID.id,req.body.email,auth_data.access_token), function(share_response){//5
+                                    console.log("shared:"+share_response)
+                                })
+                            })
                         })
+                        
                     })
                 })
 
