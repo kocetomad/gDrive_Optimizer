@@ -13,5 +13,6 @@ jobs:
           command: |
             ./Deploy.sh
           host: punchy.servebeer.com
+          args: "-tt -vvv"  
           user: kocetomad
           key: ${{ secrets.PRIVATE_KEY}}
