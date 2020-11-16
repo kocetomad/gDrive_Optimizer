@@ -28,7 +28,7 @@ function getIcon(mimeType) {
     case "application/json":
       return <DescriptionIcon/>
     default:
-      console.log("No icon set for type " + mimeType)
+      console.warn("No icon set for type " + mimeType)
       return <div/>
   }
 }

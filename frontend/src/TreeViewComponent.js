@@ -36,7 +36,7 @@ function TreeViewComponent(props) {
           newFiles.id = data.id
           newFiles.name = data.name
           newFiles.mimeType = data.mimeType
-          newFiles.children = []
+          newFiles.children = [{id: 'placeholder', name: 'placeholder_name'}]
           setFiles(newFiles)
           setRootPresence(true)
           console.log("got root folder")
@@ -67,10 +67,10 @@ function TreeViewComponent(props) {
   }, [rootIsSet, props.access_token, files])
 
   return (
-    <Card>
+    <Card style={{maxWidth: '75%'}}>
       <Card.Body>
         <Card.Title>Drive Content</Card.Title>
-        {!files && <CircularProgress className={classes.circular_progress}/>}
+        {!files.id && <CircularProgress className={classes.circular_progress}/>}
         {files && <TreeViewContent files={files}/>}
       </Card.Body>
     </Card>
