@@ -1,6 +1,8 @@
 var https = require('https');
 var fs = require('fs');
 const hbjs = require('handbrake-js')
+const fetch = require('node-fetch');
+
 const request = require("request");
 
 //downloads a file from gDrive and gets it's metadata 
@@ -14,7 +16,7 @@ const download = (path, meta, dest, email, cb) => {
                     if (!fs.existsSync(path)) {
                         fs.mkdirSync(path);
                     }
-                    var file = fs.createWriteStream(path + "/" + JSON.parse(data).id + "||" + email + "||" + JSON.parse(data).name);
+                    var file = fs.createWriteStream(path + "/" + JSON.parse(data).name);
                     response.pipe(file);
                     file.on('finish', function () {
                         cb(JSON.parse(data))
@@ -40,7 +42,7 @@ const compress = (folder, callback) => {
     i = 0
     fs.readdir(folder, (err, files) => {
         files.forEach(file => {
-            
+
             //the regex is used to trim the original file extension 
             hbjs.spawn({ input: folder + "/" + file, output: folder + "-compressed" + "/" + file.replace(/\.[^/.]+$/, "") + '.m4v' })
                 .on('error', err => {
@@ -56,10 +58,10 @@ const compress = (folder, callback) => {
                     if (progress.percentComplete == 100) {
                         console.log("finish")
                         i++;
-                        
+
                     }
-                    if (i==files.length){
-                        
+                    if (i == files.length) {
+
                         callback(folder + "-compressed")
                     }
 
@@ -72,7 +74,7 @@ const compress = (folder, callback) => {
 }
 //Resumable upload to gDrive for big files 
 //boilerplate code from https://tanaikech.github.io/2020/03/05/simple-script-of-resumable-upload-with-google-drive-api-for-node.js/
-const upload = (folder, token, callback) => {
+const upload = (folder, token, perentID, callback) => {
 
     const accessToken = token;
 
@@ -83,7 +85,6 @@ const upload = (folder, token, callback) => {
             const filename = folder + "/" + file;
 
             const fileSize = fs.statSync(filename).size;
-
             // 1. Retrieve session for resumable upload.
             request(
                 {
@@ -94,7 +95,11 @@ const upload = (folder, token, callback) => {
                         Authorization: `Bearer ${accessToken}`,
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({ name: file })
+                    body: JSON.stringify({
+                        name: file,
+                        parents:[perentID] 
+                    })
+                    
                 },
                 (err, res) => {
                     if (err) {
@@ -126,8 +131,23 @@ const upload = (folder, token, callback) => {
     });
 }
 
+//Make a folder for the user's on our drive
+const makeFolder = (path, callback) => {
+    console.log(path[1].url)
+    fetch(path[1].url, path[0]).then(response => response.json()
+    ).then(response_json => callback(response_json))
+        
+};
+
+const share = (path, callback) => {
+    fetch(path[1].url, path[0]).then(response => response.json()
+    ).then(response_json => callback(response_json))
+}
+
 module.exports = {
     download,
     compress,
-    upload
+    upload,
+    makeFolder,
+    share
 }
