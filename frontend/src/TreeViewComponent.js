@@ -39,7 +39,6 @@ function TreeViewComponent(props) {
           newFiles.children = [{id: 'placeholder', name: 'placeholder_name'}]
           setFiles(newFiles)
           setRootPresence(true)
-          console.log("got root folder")
         }
       })
     return () => {
@@ -54,7 +53,6 @@ function TreeViewComponent(props) {
         .then(response => response.json())
         .then(data => {
           if (mounted) {
-            console.log(data.files)
             let newFiles = files
             newFiles.children = data.files
             setFiles(newFiles)

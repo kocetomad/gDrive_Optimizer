@@ -5,15 +5,36 @@ import MovieIcon from "@material-ui/icons/Movie";
 import PhotoIcon from "@material-ui/icons/Photo";
 import DescriptionIcon from "@material-ui/icons/Description";
 
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 
-function getCheckbox(file, selected_nodes) {
-  // TODO Checkbox functionality.
-  if (selected_nodes.includes(file.id)) {
-    return <CheckBoxIcon/>
+function handleCheckboxClick(file, selected_nodes, setSelected) {
+  console.log("clicked file checkbox for: " + file.id)
+  let selectedNodes = [...selected_nodes]
+  if (selectedNodes.includes(file.id)) { // file is already checked
+    //let selectedNodes = [...selected_nodes]
+    selectedNodes.splice(selectedNodes.indexOf(file.id), 1)
+    setSelected(selectedNodes)
   } else {
-    return <CheckBoxOutlineBlankIcon/>
+    //let selectedNodes = [...selected_nodes]
+    selectedNodes.push(file.id)
+    setSelected(selectedNodes)
+  }
+}
+
+function getCheckbox(file, selected_nodes, setSelected) {
+  if (selected_nodes.includes(file.id)) {
+    return <CheckBoxIcon onClick={(event) => {
+      event.stopPropagation() // this is used to stop the main div from sending onClick events. just this div.
+      handleCheckboxClick(file, selected_nodes, setSelected)
+    }}/>
+  } else {
+    return <CheckBoxOutlineBlankIcon onClick={(event) => {
+      event.stopPropagation() // this is used to stop the main div from sending onClick events. just this div.
+      handleCheckboxClick(file, selected_nodes, setSelected)
+    }}/>
   }
 }
 
@@ -29,7 +50,7 @@ function getIcon(mimeType) {
       return <DescriptionIcon/>
     default:
       console.warn("No icon set for type " + mimeType)
-      return <div/>
+      return <InsertDriveFileIcon/>
   }
 }
 
