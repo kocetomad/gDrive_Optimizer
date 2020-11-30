@@ -6,31 +6,6 @@ import {getCheckbox, getIcon} from "./helpers/IconHelpers";
 
 import {getRootChildren} from "./services/rootFolder";
 
-function treeItemClicked(node, expanded_nodes, setExpanded, api_key, access_token) {
-  if (node.mimeType === "application/vnd.google-apps.folder") {
-    if (expanded_nodes.includes(node.id)) { // folder is already expanded
-      let expandedNodes = [...expanded_nodes]
-      expandedNodes.splice(expandedNodes.indexOf(node.id), 1)
-      setExpanded(expandedNodes)
-    } else { // expand folder
-      if (!node.children) {
-        getRootChildren(api_key, access_token, node.id)
-          .then(response => response.json())
-          .then(files => {
-            console.log(files)
-            node.children = files
-
-            let expandedNodes = [...expanded_nodes]
-            expandedNodes.push(node.id)
-            setExpanded(expandedNodes)
-          })
-      }
-      let expandedNodes = [...expanded_nodes]
-      expandedNodes.push(node.id)
-      setExpanded(expandedNodes)
-    }
-  }
-}
 
 const useStyles = makeStyles((theme) => ({
   tree: {
@@ -44,6 +19,33 @@ function TreeViewContent(props) {
   const classes = useStyles();
   const [expandedNodes, setExpanded] = useState([]);
   const [selectedNodes, setSelected] = useState([]);
+
+  function treeItemClicked(node) {
+    if (node.mimeType === "application/vnd.google-apps.folder") {
+      if (expandedNodes.includes(node.id)) { // folder is already expanded
+        let newExpandedNodes = [...expandedNodes]
+        newExpandedNodes.splice(newExpandedNodes.indexOf(node.id), 1)
+        setExpanded(newExpandedNodes)
+      } else { // expand folder
+        if (!node.children) {
+          getRootChildren(props.api_key, props.access_token, node.id)
+            .then(response => response.json())
+            .then(output => {
+              let files = output.files
+              console.log(files)
+              node.children = files
+
+              let newExpandedNodes = [...expandedNodes]
+              newExpandedNodes.push(node.id)
+              setExpanded(newExpandedNodes)
+            })
+        }
+        let newExpandedNodes = [...expandedNodes]
+        newExpandedNodes.push(node.id)
+        setExpanded(newExpandedNodes)
+      }
+    }
+  }
 
   function renderTree(node) {
     return (

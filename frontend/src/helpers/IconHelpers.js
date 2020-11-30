@@ -45,7 +45,7 @@ function getCheckbox(file, selected_nodes, setSelected) {
 function getIcon(mimeType) {
   switch (mimeType) {
     case "application/vnd.google-apps.folder":
-      return <FolderIcon style={{paddingRight: '2dp'}}/>
+      return <FolderIcon/>
     case "video/mp4":
       return <MovieIcon/>
     case "image/png":
@@ -53,7 +53,7 @@ function getIcon(mimeType) {
     case "application/json":
       return <DescriptionIcon/>
     default:
-      console.warn("No icon set for type " + mimeType)
+      console.log("No icon set for type \"" + mimeType + "\"")
       return <InsertDriveFileIcon/>
   }
 }
