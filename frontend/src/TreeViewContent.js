@@ -4,38 +4,32 @@ import {TreeItem, TreeView} from "@material-ui/lab";
 import {makeStyles} from '@material-ui/core/styles';
 import {getCheckbox, getIcon} from "./helpers/IconHelpers";
 
-function treeItemClicked(file, expanded_nodes, setExpanded) {
-  if (file.mimeType === "application/vnd.google-apps.folder") {
-    if (expanded_nodes.includes(file.id)) { // folder is already expanded
-      console.log("clicked on expanded file")
+import {getRootChildren} from "./services/rootFolder";
+
+function treeItemClicked(node, expanded_nodes, setExpanded, api_key, access_token) {
+  if (node.mimeType === "application/vnd.google-apps.folder") {
+    if (expanded_nodes.includes(node.id)) { // folder is already expanded
       let expandedNodes = [...expanded_nodes]
-      expandedNodes.splice(expandedNodes.indexOf(file.id), 1)
+      expandedNodes.splice(expandedNodes.indexOf(node.id), 1)
       setExpanded(expandedNodes)
     } else { // expand folder
-      console.log(expanded_nodes)
+      if (!node.children) {
+        getRootChildren(api_key, access_token, node.id)
+          .then(response => response.json())
+          .then(files => {
+            console.log(files)
+            node.children = files
+
+            let expandedNodes = [...expanded_nodes]
+            expandedNodes.push(node.id)
+            setExpanded(expandedNodes)
+          })
+      }
       let expandedNodes = [...expanded_nodes]
-      expandedNodes.push(file.id)
+      expandedNodes.push(node.id)
       setExpanded(expandedNodes)
     }
   }
-}
-
-function renderTree(file, selected_nodes, setSelected, expanded_nodes, setExpanded) {
-  return (
-    <TreeItem nodeId={file.id}
-              key={file.id}
-              label={<div>{getCheckbox(file, selected_nodes, setSelected)}{getIcon(file.mimeType)}{file.name}</div>}
-              onClick={() => {treeItemClicked(file, expanded_nodes, setExpanded)}}
-    >
-      {
-        file.mimeType === "application/vnd.google-apps.folder" ?
-          (Array.isArray(file.children) ?
-            file.children.map((node) => renderTree(node, selected_nodes, setSelected, expanded_nodes, setExpanded))
-            : <div/>)
-          : null
-      }
-    </TreeItem>
-  )
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -51,6 +45,24 @@ function TreeViewContent(props) {
   const [expandedNodes, setExpanded] = useState([]);
   const [selectedNodes, setSelected] = useState([]);
 
+  function renderTree(node) {
+    return (
+      <TreeItem nodeId={node.id}
+                key={node.id}
+                label={<div>{getCheckbox(node, selectedNodes, setSelected)}{getIcon(node.mimeType)}{node.name}</div>}
+                onClick={() => {treeItemClicked(node, expandedNodes, setExpanded, props.api_key, props.access_token)}}
+      >
+        {
+          node.mimeType === "application/vnd.google-apps.folder" ?
+            (Array.isArray(node.children) ?
+              node.children.map((node) => renderTree(node))
+              : <div/>)
+            : null
+        }
+      </TreeItem>
+    )
+  }
+
   return (
     <TreeView
       className={classes.tree}
@@ -62,7 +74,7 @@ function TreeViewContent(props) {
       //onNodeToggle={handleToggle}
       //onNodeSelect={handleSelect}
     >
-      {renderTree(props.files, selectedNodes, setSelected, expandedNodes, setExpanded)}
+      {renderTree(props.files)}
     </TreeView>
   )
 }

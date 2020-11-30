@@ -13,14 +13,16 @@ import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 function handleCheckboxClick(file, selected_nodes, setSelected) {
   console.log("clicked file checkbox for: " + file.id)
   let selectedNodes = [...selected_nodes]
-  if (selectedNodes.includes(file.id)) { // file is already checked
-    //let selectedNodes = [...selected_nodes]
-    selectedNodes.splice(selectedNodes.indexOf(file.id), 1)
-    setSelected(selectedNodes)
-  } else {
-    //let selectedNodes = [...selected_nodes]
-    selectedNodes.push(file.id)
-    setSelected(selectedNodes)
+  if (file.mimeType !== "application/vnd.google-apps.folder") {
+    if (selectedNodes.includes(file.id)) { // file is already checked
+      //let selectedNodes = [...selected_nodes]
+      selectedNodes.splice(selectedNodes.indexOf(file.id), 1)
+      setSelected(selectedNodes)
+    } else {
+      //let selectedNodes = [...selected_nodes]
+      selectedNodes.push(file.id)
+      setSelected(selectedNodes)
+    }
   }
 }
 
@@ -31,10 +33,12 @@ function getCheckbox(file, selected_nodes, setSelected) {
       handleCheckboxClick(file, selected_nodes, setSelected)
     }}/>
   } else {
-    return <CheckBoxOutlineBlankIcon onClick={(event) => {
-      event.stopPropagation() // this is used to stop the main div from sending onClick events. just this div.
-      handleCheckboxClick(file, selected_nodes, setSelected)
-    }}/>
+    if (file.mimeType !== "application/vnd.google-apps.folder") {
+      return <CheckBoxOutlineBlankIcon onClick={(event) => {
+        event.stopPropagation() // this is used to stop the main div from sending onClick events. just this div.
+        handleCheckboxClick(file, selected_nodes, setSelected)
+      }}/>
+    }
   }
 }
 
