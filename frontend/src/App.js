@@ -8,6 +8,7 @@ const CLIENT_ID = "796101496132-pif752amrr7vjvq8jqsvo9rf18mg4t24.apps.googleuser
 
 function App() {
   const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const [loggedInState, setLoggedInState] = useState(false);
   const [accessToken, setAccessToken] = useState("");
 
@@ -18,6 +19,7 @@ function App() {
     setLoggedInState(true)
     console.log("Login successful.")
     setAccessToken(response.tokenObj.access_token)
+    setUserEmail(userProfile.email)
   }
 
   // what happens when you try to login and process fails
@@ -30,6 +32,8 @@ function App() {
     console.log("Logout successful.")
     setLoggedInState(false)
     setAccessToken("")
+    setUserName("")
+    setUserEmail("")
   }
 
   return (
@@ -63,7 +67,7 @@ function App() {
       </Navbar>
 
       <header className="App-header">
-        {loggedInState && accessToken && <TreeViewComponent access_token={accessToken}/>}
+        {loggedInState && accessToken && <TreeViewComponent access_token={accessToken} user_email={userEmail}/>}
       </header>
     </div>
   );

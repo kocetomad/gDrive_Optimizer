@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import Button from "react-bootstrap/Button";
 import {ArrowDropDown, ArrowDropUp} from "@material-ui/icons";
 import {TreeItem, TreeView} from "@material-ui/lab";
 import {makeStyles} from '@material-ui/core/styles';
@@ -31,9 +32,7 @@ function TreeViewContent(props) {
           getRootChildren(props.api_key, props.access_token, node.id)
             .then(response => response.json())
             .then(output => {
-              let files = output.files
-              console.log(files)
-              node.children = files
+              node.children = output.files
 
               let newExpandedNodes = [...expandedNodes]
               newExpandedNodes.push(node.id)
@@ -52,7 +51,9 @@ function TreeViewContent(props) {
       <TreeItem nodeId={node.id}
                 key={node.id}
                 label={<div>{getCheckbox(node, selectedNodes, setSelected)}{getIcon(node.mimeType)}{node.name}</div>}
-                onClick={() => {treeItemClicked(node, expandedNodes, setExpanded, props.api_key, props.access_token)}}
+                onClick={() => {
+                  treeItemClicked(node, expandedNodes, setExpanded, props.api_key, props.access_token)
+                }}
       >
         {
           node.mimeType === "application/vnd.google-apps.folder" ?
@@ -65,19 +66,45 @@ function TreeViewContent(props) {
     )
   }
 
-  return (
-    <TreeView
-      className={classes.tree}
-      defaultCollapseIcon={<ArrowDropUp/>}
-      defaultExpandIcon={<ArrowDropDown/>}
-      expanded={expandedNodes}
-      //defaultExpanded={[props.files.id]}
-      //selected={selectedNodes}
-      //onNodeToggle={handleToggle}
-      //onNodeSelect={handleSelect}
-    >
-      {renderTree(props.files)}
-    </TreeView>
+  function sendFiles(files) {
+    const data = {
+      fileID: files,
+      token: props.access_token,
+      email: props.user_email
+    }
+
+    fetch('http://punchy.servebeer.com:4000/fetchMultipleFiles', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+        // TODO: Set state that request has been successful
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }
+
+  return (<div>
+      <TreeView
+        className={classes.tree}
+        defaultCollapseIcon={<ArrowDropUp/>}
+        defaultExpandIcon={<ArrowDropDown/>}
+        expanded={expandedNodes}
+      >
+        {renderTree(props.files)}
+      </TreeView>
+      <Button onClick={() => {
+        sendFiles(selectedNodes)
+      }}>Compress</Button>
+    </div>
+
   )
 }
 

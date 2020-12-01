@@ -69,7 +69,7 @@ function TreeViewComponent(props) {
       <Card.Body>
         <Card.Title>Drive Content</Card.Title>
         {!files.id && <CircularProgress className={classes.circular_progress}/>}
-        {files && <TreeViewContent files={files} access_token={props.access_token} api_key={API_KEY}/>}
+        {files && <TreeViewContent files={files} access_token={props.access_token} user_email={props.user_email} api_key={API_KEY}/>}
       </Card.Body>
     </Card>
   )

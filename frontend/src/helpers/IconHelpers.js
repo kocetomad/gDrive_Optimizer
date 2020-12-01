@@ -11,7 +11,6 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 
 function handleCheckboxClick(file, selected_nodes, setSelected) {
-  console.log("clicked file checkbox for: " + file.id)
   let selectedNodes = [...selected_nodes]
   if (file.mimeType !== "application/vnd.google-apps.folder") {
     if (selectedNodes.includes(file.id)) { // file is already checked
