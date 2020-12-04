@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import TreeViewComponent from './TreeViewComponent.js'
 import CompressionMethodComponent from "./CompressionMethodComponent";
-import {Nav, Navbar} from "react-bootstrap";
+import {Col, Container, Nav, Navbar, Row} from "react-bootstrap";
 import {GoogleLogin, GoogleLogout} from "react-google-login";
 
 const CLIENT_ID = "796101496132-pif752amrr7vjvq8jqsvo9rf18mg4t24.apps.googleusercontent.com"
@@ -80,10 +80,19 @@ function App() {
       </Navbar>
 
       <header className="App-header">
-        {loggedInState && accessToken && <TreeViewComponent queue_setter={setQueue}
-                                                            access_token={accessToken}
-                                                            user_email={userEmail}/>}
-        {loggedInState && accessToken && <CompressionMethodComponent queue={queue}/>}
+        <Container>
+          <Row>
+            <Col md={4} className="treeViewComponent">
+              {loggedInState && accessToken &&
+              <TreeViewComponent queue_setter={setQueue}
+                                 access_token={accessToken}
+                                 user_email={userEmail}/>}
+            </Col>
+            <Col md={8} className="compressionComponent align-self-center">
+              {loggedInState && accessToken && <CompressionMethodComponent queue={queue}/>}
+            </Col>
+          </Row>
+        </Container>
       </header>
     </div>
   );

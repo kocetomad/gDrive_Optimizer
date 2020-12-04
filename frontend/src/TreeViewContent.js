@@ -122,7 +122,6 @@ function TreeViewContent(props) {
         props.queue_setter(selectedNodes)
       }}>Compress</Button>
     </div>
-
   )
 }
 
