@@ -12,6 +12,9 @@ function App() {
   const [loggedInState, setLoggedInState] = useState(false);
   const [accessToken, setAccessToken] = useState("");
 
+  /**
+   * @description This is the function callback when login to Google is successful
+   * */
   let onLoginSuccess = (response) => {
     let userProfile = response.profileObj
     setUserName(userProfile.givenName + " " + userProfile.familyName)
@@ -22,12 +25,16 @@ function App() {
     setUserEmail(userProfile.email)
   }
 
-  // what happens when you try to login and process fails
+  /**
+   * @description This is the function callback when login to Google fails
+   * */
   let onLoginFail = (response) => {
     console.error({result: "Login failed.", output: response})
   }
 
-  // what happens when you log out from Google
+  /**
+   * @description This is the function callback when you logout from Google
+   * */
   let onLogoutSuccess = () => {
     console.log("Logout successful.")
     setLoggedInState(false)
@@ -73,4 +80,8 @@ function App() {
   );
 }
 
+/**
+ * The App module. The root of our React app.
+ * @module App
+ * */
 export default App;
