@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import './App.css';
 import TreeViewComponent from './TreeViewComponent.js'
+import CompressionMethodComponent from "./CompressionMethodComponent";
 import {Nav, Navbar} from "react-bootstrap";
 import {GoogleLogin, GoogleLogout} from "react-google-login";
 
@@ -9,8 +10,12 @@ const CLIENT_ID = "796101496132-pif752amrr7vjvq8jqsvo9rf18mg4t24.apps.googleuser
 function App() {
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
+
   const [loggedInState, setLoggedInState] = useState(false);
+
   const [accessToken, setAccessToken] = useState("");
+
+  const [queue, setQueue] = useState([]); // this is the list of files to compress
 
   /**
    * @description This is the function callback when login to Google is successful
@@ -41,6 +46,7 @@ function App() {
     setAccessToken("")
     setUserName("")
     setUserEmail("")
+    setQueue([])
   }
 
   return (
@@ -74,7 +80,10 @@ function App() {
       </Navbar>
 
       <header className="App-header">
-        {loggedInState && accessToken && <TreeViewComponent access_token={accessToken} user_email={userEmail}/>}
+        {loggedInState && accessToken && <TreeViewComponent queue_setter={setQueue}
+                                                            access_token={accessToken}
+                                                            user_email={userEmail}/>}
+        {loggedInState && accessToken && <CompressionMethodComponent queue={queue}/>}
       </header>
     </div>
   );

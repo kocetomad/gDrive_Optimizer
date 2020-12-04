@@ -85,28 +85,28 @@ function TreeViewContent(props) {
    * @description This function sends the list of files to compress to the backend.
    */
   function sendFiles(files) {
-    const data = {
-      fileID: files,
-      token: props.access_token,
-      email: props.user_email
-    }
-
-    fetch('http://punchy.servebeer.com:4000/fetchMultipleFiles', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Success:', data);
-        // TODO: Set state that request has been successful
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+    // const data = {
+    //   fileID: files,
+    //   token: props.access_token,
+    //   email: props.user_email
+    // }
+    //
+    // fetch('http://punchy.servebeer.com:4000/fetchMultipleFiles', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'Accept': 'application/json',
+    //   },
+    //   body: JSON.stringify(data),
+    // })
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     console.log('Success:', data);
+    //     // TODO: Set state that request has been successful
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error:', error);
+    //   });
   }
 
   return (<div>
@@ -119,7 +119,7 @@ function TreeViewContent(props) {
         {renderTree(props.files)}
       </TreeView>
       <Button onClick={() => {
-        sendFiles(selectedNodes)
+        props.queue_setter(selectedNodes)
       }}>Compress</Button>
     </div>
 
