@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import Button from "react-bootstrap/Button";
 import {ArrowDropDown, ArrowDropUp} from "@material-ui/icons";
 import {TreeItem, TreeView} from "@material-ui/lab";
 import {makeStyles} from '@material-ui/core/styles';
@@ -10,7 +9,7 @@ import {getRootChildren} from "./services/rootFolder";
 /**
  * @description This represents the styles used for the TreeView component
  * */
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   tree: {
     height: '100%',
     flexGrow: 1,
@@ -65,7 +64,7 @@ function TreeViewContent(props) {
     return (
       <TreeItem nodeId={node.id}
                 key={node.id}
-                label={<div>{getCheckbox(node, selectedNodes, setSelected)}{getIcon(node.mimeType)}{node.name}</div>}
+                label={<div>{getCheckbox(node, selectedNodes, setSelected, props.queue_setter)}{getIcon(node.mimeType)}{node.name}</div>}
                 onClick={() => {
                   treeItemClicked(node, expandedNodes, setExpanded, props.api_key, props.access_token)
                 }}
@@ -81,35 +80,7 @@ function TreeViewContent(props) {
     )
   }
 
-  /**
-   * @description This function sends the list of files to compress to the backend.
-   */
-  function sendFiles(files) {
-    // const data = {
-    //   fileID: files,
-    //   token: props.access_token,
-    //   email: props.user_email
-    // }
-    //
-    // fetch('http://punchy.servebeer.com:4000/fetchMultipleFiles', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Accept': 'application/json',
-    //   },
-    //   body: JSON.stringify(data),
-    // })
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log('Success:', data);
-    //     // TODO: Set state that request has been successful
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error:', error);
-    //   });
-  }
-
-  return (<div>
+  return (
       <TreeView
         className={classes.tree}
         defaultCollapseIcon={<ArrowDropUp/>}
@@ -118,10 +89,6 @@ function TreeViewContent(props) {
       >
         {renderTree(props.files)}
       </TreeView>
-      <Button onClick={() => {
-        props.queue_setter(selectedNodes)
-      }}>Compress</Button>
-    </div>
   )
 }
 

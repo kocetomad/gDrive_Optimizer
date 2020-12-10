@@ -80,9 +80,9 @@ function App() {
       </Navbar>
 
       <header className="App-header">
-        <Container>
-          <Row>
-            <Col md={4} className="treeViewComponent">
+        <Container className="h-100">
+          <Row className="h-100 align-items-center">
+            <Col md={4} className="treeViewComponent h-100">
               {loggedInState && accessToken &&
               <TreeViewComponent queue_setter={setQueue}
                                  access_token={accessToken}

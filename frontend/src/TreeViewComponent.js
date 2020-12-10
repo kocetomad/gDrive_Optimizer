@@ -6,7 +6,6 @@ import './index.css';
 import TreeViewContent from "./TreeViewContent";
 
 import {getRootChildren, getRootFolder} from "./services/rootFolder";
-import Button from "react-bootstrap/Button";
 
 /**
  * @description The Google API key for our app.
@@ -22,6 +21,10 @@ function TreeViewComponent(props) {
    * @description The list of files fetched from Google Drive.
    * */
   const [files, setFiles] = useState({});
+
+  /** @description This is the list of files to be processed. It's setter will be sent to the TreeViewContent prop
+   * */
+  const [localQueue, setLocalQueue] = useState([]);
 
   /**
    * @description State used to check if the root folder has been fetched from Drive.
@@ -72,11 +75,17 @@ function TreeViewComponent(props) {
     }
   }, [rootIsSet, props.access_token, files])
 
+  useEffect(() => { //whenever the queue is modified, update it
+    let mounted = true;
+    if(mounted) {
+      props.queue_setter(localQueue)
+    }
+  }, [props, localQueue])
   return (
-    <Card>
+    <Card className="h-100">
       <Card.Body>
         <Card.Title>Drive Content</Card.Title>
-        {files && <TreeViewContent queue_setter={props.queue_setter} files={files} access_token={props.access_token} user_email={props.user_email}
+        {files && <TreeViewContent queue_setter={setLocalQueue} files={files} access_token={props.access_token} user_email={props.user_email}
                                    api_key={API_KEY}/>}
       </Card.Body>
     </Card>
