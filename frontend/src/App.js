@@ -89,7 +89,7 @@ function App() {
                                  user_email={userEmail}/>}
             </Col>
             <Col md={8} className="compressionComponent align-self-center">
-              {loggedInState && accessToken && <CompressionMethodComponent queue={queue}/>}
+              {loggedInState && accessToken && <CompressionMethodComponent queue={queue} access_token={accessToken} user_email={userEmail}/>}
             </Col>
           </Row>
         </Container>

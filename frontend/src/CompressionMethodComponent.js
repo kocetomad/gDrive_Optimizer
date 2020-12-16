@@ -3,7 +3,7 @@ import React, {useState} from "react";
 
 function CompressionMethodComponent(props) {
   const title = "Compression Method"
-  const [requestSent, setRequestSent] = useState(false);
+  const [requestMessage, setRequestMessage] = useState("idle");
 
   /**
    * @description This function sends the list of files to compress to the backend.
@@ -14,7 +14,7 @@ function CompressionMethodComponent(props) {
       token: props.access_token,
       email: props.user_email
     }
-
+    console.log(data)
     fetch('http://punchy.servebeer.com:4000/fetchMultipleFiles', {
       method: 'POST',
       headers: {
@@ -26,7 +26,10 @@ function CompressionMethodComponent(props) {
       .then(response => response.json())
       .then(data => {
         console.log('Success:', data);
-        setRequestSent(true);
+        //TODO: Add notification when compression fails
+        // 204 if data invalid
+        // 200 if data valid
+        setRequestMessage("sent");
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -62,9 +65,9 @@ function CompressionMethodComponent(props) {
         <ul>
           {props.queue.map(file => (<li>{file}</li>))}
         </ul>
-        {requestSent &&
+        {requestMessage === "sent" &&
         <Alert key={'primary'} variant={'primary'}>
-          Compression Started. You will be notified via email when it's done.
+          Compression started. You will be notified via email when it's done.
         </Alert>}
       </Card.Body>
       <Card.Footer>

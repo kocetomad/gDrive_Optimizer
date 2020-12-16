@@ -81,7 +81,7 @@ function TreeViewContent(props) {
   }
 
   return (
-      <TreeView
+      <TreeView style={{height: '95%', overflow: 'auto'}}
         className={classes.tree}
         defaultCollapseIcon={<ArrowDropUp/>}
         defaultExpandIcon={<ArrowDropDown/>}
