@@ -34,7 +34,8 @@ function getCheckbox(file, selected_nodes, setSelected, setQueue) {
       handleCheckboxClick(file, selected_nodes, setSelected, setQueue)
     }}/>
   } else {
-    if (file.mimeType !== "application/vnd.google-apps.folder") {
+    if (file.mimeType === "video/mp4") { //only show checkboxes for mp4 videos
+    // if (file.mimeType !== "application/vnd.google-apps.folder") {
       return <CheckBoxOutlineBlankIcon onClick={(event) => {
         event.stopPropagation() // this is used to stop the main div from sending onClick events. just this div.
         handleCheckboxClick(file, selected_nodes, setSelected, setQueue)
