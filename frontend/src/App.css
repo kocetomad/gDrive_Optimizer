@@ -11,12 +11,7 @@
   color: #61dafb;
 }
 
-.treeViewComponent {
-  padding-top: 3rem;
-  padding-bottom: 3rem;
-}
-
-.compressionComponent {
+.treeViewComponent .compressionComponent{
   padding-top: 3rem;
   padding-bottom: 3rem;
 }
